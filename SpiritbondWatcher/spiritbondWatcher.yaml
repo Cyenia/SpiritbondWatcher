@@ -1,6 +1,7 @@
 ﻿name: Spiritbond Watcher
 author: Lin Sivvi
 description: Tells you when to extract materia when you're actually paying attention.
+punchline: Extract materia when you're paying attention.
 category_tags:
   - Utility
 internal_name: SpiritbondWatcher
