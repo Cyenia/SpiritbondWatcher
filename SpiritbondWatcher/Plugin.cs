@@ -1,13 +1,14 @@
-﻿namespace SpiritbondWatcher;
-
-using Dalamud.Data;
+﻿using Dalamud.Data;
 using Dalamud.Game.ClientState;
 using Dalamud.Game.Command;
 using Dalamud.Game.Gui;
 using Dalamud.IoC;
 using Dalamud.Plugin;
+using System.Threading.Tasks;
 
-public sealed class Plugin : IDalamudPlugin
+namespace SpiritbondWatcher;
+
+internal sealed class Plugin : IDalamudPlugin
 {
     public string Name => "Spiritbond Watcher";
     private const string Command = "/sbw";
@@ -27,49 +28,49 @@ public sealed class Plugin : IDalamudPlugin
         [RequiredVersion("1.0")] DataManager data,
         [RequiredVersion("1.0")] ChatGui chat)
     {
-        this.PluginInterface = pluginInterface;
-        this.CommandManager = commandManager;
-        this.Client = client;
-        this.Data = data;
-        this.Chat = chat;
+        PluginInterface = pluginInterface;
+        CommandManager = commandManager;
+        Client = client;
+        Data = data;
+        Chat = chat;
 
-        this.Config = this.PluginInterface.GetPluginConfig() as Config ?? new Config();
-        this.Config.Initialize(this.PluginInterface);
-        this.ConfigUI = new ConfigUI(this.Config);
+        Config = PluginInterface.GetPluginConfig() as Config ?? new Config();
+        Config.Initialize(PluginInterface);
+        ConfigUI = new ConfigUI(Config);
 
-        this.CommandManager.AddHandler(Command, new CommandInfo(this.OnCommand)
+        CommandManager.AddHandler(Command, new CommandInfo(this.OnCommand)
         {
             HelpMessage = "Display bonded gear"
         });
-        this.Client.TerritoryChanged += this.OnZoneChange;
+        Client.TerritoryChanged += this.OnZoneChange;
 
-        this.PluginInterface.UiBuilder.Draw += DrawUI;
-        this.PluginInterface.UiBuilder.OpenConfigUi += DrawConfigUI;
+        PluginInterface.UiBuilder.Draw += DrawUI;
+        PluginInterface.UiBuilder.OpenConfigUi += DrawConfigUI;
     }
 
-    private void OnZoneChange(object? sender, ushort e)
+    private void OnZoneChange(object sender, ushort e)
     {
-        this.OnCommand(Command, "zone");
+        OnCommand(Command, "zone");
     }
 
     private void OnCommand(string cmd, string args)
     {
-        Task.Run(() => GearChecker.CheckGear(this.Data, this.Chat, this.Config, args));
+        Task.Run(() => GearChecker.CheckGear(Data, Chat, Config, args));
     }
 
     private void DrawUI()
     {
-        this.ConfigUI.Draw();
+        ConfigUI.Draw();
     }
 
     private void DrawConfigUI()
     {
-        this.ConfigUI.Visible = true;
+        ConfigUI.Visible = true;
     }
 
     public void Dispose()
     {
-        this.CommandManager.RemoveHandler(Command);
-        this.Client.TerritoryChanged -= this.OnZoneChange;
+        CommandManager.RemoveHandler(Command);
+        Client.TerritoryChanged -= OnZoneChange;
     }
 }

@@ -5,44 +5,43 @@ using ImGuiNET;
 using System;
 using System.Numerics;
 
-class ConfigUI : IDisposable
+internal class ConfigUI : IDisposable
 {
-    private Config configuration;
+    private readonly Config _configuration;
 
-    public const ImGuiWindowFlags Flags = ImGuiWindowFlags.NoResize |
-                                          ImGuiWindowFlags.NoCollapse |
-                                          ImGuiWindowFlags.NoScrollbar |
-                                          ImGuiWindowFlags.NoScrollWithMouse;
+    private const ImGuiWindowFlags Flags = ImGuiWindowFlags.NoResize |
+                                           ImGuiWindowFlags.NoCollapse |
+                                           ImGuiWindowFlags.NoScrollbar |
+                                           ImGuiWindowFlags.NoScrollWithMouse;
 
-    private bool visible = false;
+    private bool _visible;
     public bool Visible
     {
-        get { return this.visible; }
-        set { this.visible = value; }
+        set => _visible = value;
     }
 
     public ConfigUI(Config configuration)
     {
-        this.configuration = configuration;
+        _configuration = configuration;
     }
 
     public void Draw()
     {
-        if (!visible)
+        if (!_visible)
         {
             return;
         }
 
         ImGui.SetNextWindowSize(new Vector2(232, 75), ImGuiCond.Always);
-        if (ImGui.Begin("Spiritbond Watcher", ref this.visible, Flags))
+        if (ImGui.Begin("Spiritbond Watcher", ref this._visible, Flags))
         {
-            bool lineByLineValue = this.configuration.BondedGearDisplayLineByLine;
+            var lineByLineValue = this._configuration.BondedGearDisplayLineByLine;
             if (ImGui.Checkbox("Display gear line by line", ref lineByLineValue))
             {
-                if (this.configuration.BondedGearDisplayLineByLine != lineByLineValue)
+                if (_configuration.BondedGearDisplayLineByLine != lineByLineValue)
                 {
-                    this.configuration.BondedGearDisplayLineByLine = lineByLineValue;
-                    this.configuration.Save();
+                    _configuration.BondedGearDisplayLineByLine = lineByLineValue;
+                    _configuration.Save();
                 }
             }
             ImGuiComponents.HelpMarker("Display bonded gear line by line");
@@ -50,5 +49,8 @@ class ConfigUI : IDisposable
         ImGui.End();
     }
 
-    public void Dispose() { }
+    public void Dispose()
+    {
+        GC.SuppressFinalize(this);
+    }
 }

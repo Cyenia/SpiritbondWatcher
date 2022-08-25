@@ -9,18 +9,18 @@ public class Config : IPluginConfiguration
 {
     public int Version { get; set; } = 0;
 
-    public bool BondedGearDisplayLineByLine { get; set; } = false;
+    public bool BondedGearDisplayLineByLine { get; set; }
 
     [NonSerialized]
-    private DalamudPluginInterface? pluginInterface;
+    private DalamudPluginInterface? _pluginInterface;
 
     public void Initialize(DalamudPluginInterface pluginInterface)
     {
-        this.pluginInterface = pluginInterface;
+        _pluginInterface = pluginInterface;
     }
 
     public void Save()
     {
-        this.pluginInterface!.SavePluginConfig(this);
+        _pluginInterface!.SavePluginConfig(this);
     }
 }

@@ -1,6 +1,7 @@
-﻿namespace SpiritbondWatcher;
-
+﻿using System.Collections.Generic;
 using FFXIVClientStructs.FFXIV.Client.Game;
+
+namespace SpiritbondWatcher;
 
 public static unsafe class Inventory
 {

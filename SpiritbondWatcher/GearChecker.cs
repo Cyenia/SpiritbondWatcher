@@ -1,10 +1,11 @@
-﻿namespace SpiritbondWatcher;
-
-using Dalamud.Data;
+﻿using Dalamud.Data;
 using Dalamud.Game.Gui;
 using Dalamud.Game.Text.SeStringHandling;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using Lumina.Excel.GeneratedSheets;
+using System.Linq;
+
+namespace SpiritbondWatcher;
 
 public static class GearChecker
 {
@@ -38,15 +39,17 @@ public static class GearChecker
         var stringBuilder = new SeStringBuilder();
         stringBuilder.AddUiForeground(34);
 
+        string message;
+        
         if (items.Any())
         {
             var newLine = config.BondedGearDisplayLineByLine;
-            string message = "Gear fully bonded:" + (newLine ? "\n" : " ");
+            message = "Gear fully bonded:" + (newLine ? "\n" : " ");
 
             if (items.Count > 10)
             {
                 message += string.Join((newLine ? "\n" : ", "), items.Take(10));
-                message += String.Format((newLine ? "\n({0} more)" : " and {0} more"), items.Count - 10);
+                message += string.Format((newLine ? "\n({0} more)" : " and {0} more"), items.Count - 10);
             }
             else
             {
@@ -58,7 +61,7 @@ public static class GearChecker
         }
         else if(args != "zone")
         {
-            string message = "No gear fully bonded";
+            message = "No gear fully bonded";
 
             stringBuilder.AddText(message);
             chat.Print(stringBuilder.BuiltString);
