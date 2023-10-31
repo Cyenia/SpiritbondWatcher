@@ -1,32 +1,29 @@
-﻿using Dalamud.Data;
-using Dalamud.Game.ClientState;
-using Dalamud.Game.Command;
-using Dalamud.Game.Gui;
+﻿using Dalamud.Game.Command;
 using Dalamud.IoC;
 using Dalamud.Plugin;
 using System.Threading.Tasks;
+using Dalamud.Plugin.Services;
 
 namespace SpiritbondWatcher;
 
 internal sealed class Plugin : IDalamudPlugin
 {
-    public string Name => "Spiritbond Watcher";
     private const string Command = "/sbw";
 
     private DalamudPluginInterface PluginInterface { get; init; }
-    private CommandManager CommandManager { get; init; }
-    private ClientState Client { get; init; }
-    private DataManager Data { get; init; }
-    private ChatGui Chat { get; init; }
+    private ICommandManager CommandManager { get; init; }
+    private IClientState Client { get; init; }
+    private IDataManager Data { get; init; }
+    private IChatGui Chat { get; init; }
     private Config Config { get; init; }
     private ConfigUI ConfigUI { get; init; }
 
     public Plugin(
         [RequiredVersion("1.0")] DalamudPluginInterface pluginInterface,
-        [RequiredVersion("1.0")] CommandManager commandManager,
-        [RequiredVersion("1.0")] ClientState client,
-        [RequiredVersion("1.0")] DataManager data,
-        [RequiredVersion("1.0")] ChatGui chat)
+        [RequiredVersion("1.0")] ICommandManager commandManager,
+        [RequiredVersion("1.0")] IClientState client,
+        [RequiredVersion("1.0")] IDataManager data,
+        [RequiredVersion("1.0")] IChatGui chat)
     {
         PluginInterface = pluginInterface;
         CommandManager = commandManager;
@@ -48,7 +45,7 @@ internal sealed class Plugin : IDalamudPlugin
         PluginInterface.UiBuilder.OpenConfigUi += DrawConfigUI;
     }
 
-    private void OnZoneChange(object sender, ushort e)
+    private void OnZoneChange(ushort e)
     {
         OnCommand(Command, "zone");
     }

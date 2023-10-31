@@ -1,9 +1,8 @@
-﻿using Dalamud.Data;
-using Dalamud.Game.Gui;
-using Dalamud.Game.Text.SeStringHandling;
+﻿using Dalamud.Game.Text.SeStringHandling;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using Lumina.Excel.GeneratedSheets;
 using System.Linq;
+using Dalamud.Plugin.Services;
 
 namespace SpiritbondWatcher;
 
@@ -28,7 +27,7 @@ public static class GearChecker
         // InventoryType.Inventory4,
     };
     
-    public static void CheckGear(DataManager data, ChatGui chat, Config config, string args)
+    public static void CheckGear(IDataManager data, IChatGui chat, Config config, string args)
     {
         var items =
             (from bondedItem in Inventory.GetBondedItems(InventoriesToSearch)
