@@ -3,7 +3,7 @@ SpiritbondWatcher is an FFXIV Dalamud plugin that tells you when to extract mate
 
 ## Installation
 ```
-https://raw.githubusercontent.com/xPumaa/DalamudPlugins/main/pluginmaster.json
+https://raw.githubusercontent.com/Cyeniia/DalamudPlugins/main/pluginmaster.json
 ```
 * Copy the link above
 * Open your Plugin Installer Window and click Settings
