@@ -8,7 +8,8 @@ namespace SpiritbondWatcher;
 
 public static class GearChecker
 {
-    private static readonly InventoryType[] InventoriesToSearch = {
+    private static readonly InventoryType[] InventoriesToSearch =
+    [
         InventoryType.EquippedItems,
         InventoryType.ArmoryBody,
         InventoryType.ArmoryEar,
@@ -20,12 +21,12 @@ public static class GearChecker
         InventoryType.ArmoryRings,
         InventoryType.ArmoryWrist,
         InventoryType.ArmoryMainHand,
-        InventoryType.ArmoryOffHand,
+        InventoryType.ArmoryOffHand
         // InventoryType.Inventory1,
         // InventoryType.Inventory2,
         // InventoryType.Inventory3,
         // InventoryType.Inventory4,
-    };
+    ];
     
     public static void CheckGear(IDataManager data, IChatGui chat, Config config, string args)
     {
@@ -40,7 +41,7 @@ public static class GearChecker
 
         string message;
         
-        if (items.Any())
+        if (items.Count != 0)
         {
             var newLine = config.BondedGearDisplayLineByLine;
             message = "Gear fully bonded:" + (newLine ? "\n" : " ");

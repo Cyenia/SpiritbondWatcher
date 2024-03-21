@@ -5,10 +5,8 @@ using ImGuiNET;
 using System;
 using System.Numerics;
 
-internal class ConfigUI : IDisposable
+internal class ConfigUI(Config configuration) : IDisposable
 {
-    private readonly Config _configuration;
-
     private const ImGuiWindowFlags Flags = ImGuiWindowFlags.NoResize |
                                            ImGuiWindowFlags.NoCollapse |
                                            ImGuiWindowFlags.NoScrollbar |
@@ -18,11 +16,6 @@ internal class ConfigUI : IDisposable
     public bool Visible
     {
         set => _visible = value;
-    }
-
-    public ConfigUI(Config configuration)
-    {
-        _configuration = configuration;
     }
 
     public void Draw()
@@ -35,13 +28,13 @@ internal class ConfigUI : IDisposable
         ImGui.SetNextWindowSize(new Vector2(232, 75), ImGuiCond.Always);
         if (ImGui.Begin("Spiritbond Watcher", ref this._visible, Flags))
         {
-            var lineByLineValue = this._configuration.BondedGearDisplayLineByLine;
+            var lineByLineValue = configuration.BondedGearDisplayLineByLine;
             if (ImGui.Checkbox("Display gear line by line", ref lineByLineValue))
             {
-                if (_configuration.BondedGearDisplayLineByLine != lineByLineValue)
+                if (configuration.BondedGearDisplayLineByLine != lineByLineValue)
                 {
-                    _configuration.BondedGearDisplayLineByLine = lineByLineValue;
-                    _configuration.Save();
+                    configuration.BondedGearDisplayLineByLine = lineByLineValue;
+                    configuration.Save();
                 }
             }
             ImGuiComponents.HelpMarker("Display bonded gear line by line");
