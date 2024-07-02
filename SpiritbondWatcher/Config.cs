@@ -12,9 +12,9 @@ public class Config : IPluginConfiguration
     public bool BondedGearDisplayLineByLine { get; set; }
 
     [NonSerialized]
-    private DalamudPluginInterface _pluginInterface;
+    private IDalamudPluginInterface _pluginInterface;
 
-    public void Initialize(DalamudPluginInterface pluginInterface)
+    public void Initialize(IDalamudPluginInterface pluginInterface)
     {
         _pluginInterface = pluginInterface;
     }

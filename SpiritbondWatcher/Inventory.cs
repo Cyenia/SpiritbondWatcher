@@ -18,9 +18,9 @@ public static unsafe class Inventory
             for (var i = 0; i < size; i++)
             {
                 var item = container->GetInventorySlot(i);
-                if (item->ItemID != 0 && item->Spiritbond >= 10000)
+                if (item->ItemId != 0 && item->Spiritbond >= 10000)
                 {
-                    bondedItems.Add(item->ItemID);
+                    bondedItems.Add(item->ItemId);
                 }
             }
         }

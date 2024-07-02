@@ -1,5 +1,4 @@
 ﻿using Dalamud.Game.Command;
-using Dalamud.IoC;
 using Dalamud.Plugin;
 using System.Threading.Tasks;
 using Dalamud.Plugin.Services;
@@ -10,7 +9,7 @@ internal sealed class Plugin : IDalamudPlugin
 {
     private const string Command = "/sbw";
 
-    private DalamudPluginInterface PluginInterface { get; init; }
+    private IDalamudPluginInterface PluginInterface { get; init; }
     private ICommandManager CommandManager { get; init; }
     private IClientState Client { get; init; }
     private IDataManager Data { get; init; }
@@ -18,12 +17,7 @@ internal sealed class Plugin : IDalamudPlugin
     private Config Config { get; init; }
     private ConfigUI ConfigUI { get; init; }
 
-    public Plugin(
-        [RequiredVersion("1.0")] DalamudPluginInterface pluginInterface,
-        [RequiredVersion("1.0")] ICommandManager commandManager,
-        [RequiredVersion("1.0")] IClientState client,
-        [RequiredVersion("1.0")] IDataManager data,
-        [RequiredVersion("1.0")] IChatGui chat)
+    public Plugin(IDalamudPluginInterface pluginInterface, ICommandManager commandManager, IClientState client, IDataManager data, IChatGui chat)
     {
         PluginInterface = pluginInterface;
         CommandManager = commandManager;
@@ -35,11 +29,11 @@ internal sealed class Plugin : IDalamudPlugin
         Config.Initialize(PluginInterface);
         ConfigUI = new ConfigUI(Config);
 
-        CommandManager.AddHandler(Command, new CommandInfo(this.OnCommand)
+        CommandManager.AddHandler(Command, new CommandInfo(OnCommand)
         {
             HelpMessage = "Display bonded gear"
         });
-        Client.TerritoryChanged += this.OnZoneChange;
+        Client.TerritoryChanged += OnZoneChange;
 
         PluginInterface.UiBuilder.Draw += DrawUI;
         PluginInterface.UiBuilder.OpenConfigUi += DrawConfigUI;
