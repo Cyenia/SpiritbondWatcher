@@ -1,8 +1,8 @@
-﻿namespace SpiritbondWatcher;
-
-using Dalamud.Configuration;
+﻿using Dalamud.Configuration;
 using Dalamud.Plugin;
 using System;
+
+namespace SpiritbondWatcher;
 
 [Serializable]
 public class Config : IPluginConfiguration
@@ -12,9 +12,9 @@ public class Config : IPluginConfiguration
     public bool BondedGearDisplayLineByLine { get; set; }
 
     [NonSerialized]
-    private IDalamudPluginInterface _pluginInterface;
+    private IDalamudPluginInterface? _pluginInterface;
 
-    public void Initialize(IDalamudPluginInterface pluginInterface)
+    public void Initialize(IDalamudPluginInterface? pluginInterface)
     {
         _pluginInterface = pluginInterface;
     }

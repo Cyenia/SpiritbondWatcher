@@ -2,8 +2,8 @@
 author: Cyenia
 description: Tells you when to extract materia when you're actually paying attention.
 punchline: Extract materia when you're paying attention.
-category_tags:
+tags:
   - Utility
 internal_name: SpiritbondWatcher
 repo_url: https://github.com/Cyeniia/SpiritbondWatcher
-changelog: apiX + 7.0 update
+changelog: api11 update

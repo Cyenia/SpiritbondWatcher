@@ -9,7 +9,7 @@ internal sealed class Plugin : IDalamudPlugin
 {
     private const string Command = "/sbw";
 
-    private IDalamudPluginInterface PluginInterface { get; init; }
+    private IDalamudPluginInterface? PluginInterface { get; init; }
     private ICommandManager CommandManager { get; init; }
     private IClientState Client { get; init; }
     private IDataManager Data { get; init; }
@@ -37,6 +37,7 @@ internal sealed class Plugin : IDalamudPlugin
 
         PluginInterface.UiBuilder.Draw += DrawUI;
         PluginInterface.UiBuilder.OpenConfigUi += DrawConfigUI;
+        PluginInterface.UiBuilder.OpenMainUi += DrawConfigUI;
     }
 
     private void OnZoneChange(ushort e)
@@ -56,7 +57,7 @@ internal sealed class Plugin : IDalamudPlugin
 
     private void DrawConfigUI()
     {
-        ConfigUI.Visible = true;
+        ConfigUI.Visible = !ConfigUI.Visible;
     }
 
     public void Dispose()

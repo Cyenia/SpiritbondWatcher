@@ -1,9 +1,9 @@
-﻿namespace SpiritbondWatcher;
-
-using Dalamud.Interface.Components;
+﻿using Dalamud.Interface.Components;
 using ImGuiNET;
 using System;
 using System.Numerics;
+
+namespace SpiritbondWatcher;
 
 internal class ConfigUI(Config configuration) : IDisposable
 {
@@ -16,6 +16,7 @@ internal class ConfigUI(Config configuration) : IDisposable
     public bool Visible
     {
         set => _visible = value;
+        get => _visible;
     }
 
     public void Draw()
