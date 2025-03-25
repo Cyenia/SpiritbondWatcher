@@ -1,12 +1,11 @@
-<Project Sdk="Dalamud.NET.Sdk/11.0.0">
+<Project Sdk="Dalamud.NET.Sdk/12.0.2">
     <PropertyGroup>
         <AssemblyName>SpiritbondWatcher</AssemblyName>
-        <TargetFramework>net9.0-windows</TargetFramework>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <PlatformTarget>x64</PlatformTarget>
         <Platforms>x64</Platforms>
         <LangVersion>latest</LangVersion>
-        <Version>1.7.1.0</Version>
+        <Version>1.7.2.0</Version>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
