@@ -1,8 +1,8 @@
-﻿using Dalamud.Game.Text.SeStringHandling;
-using FFXIVClientStructs.FFXIV.Client.Game;
+﻿using FFXIVClientStructs.FFXIV.Client.Game;
 using Lumina.Excel.Sheets;
 using System.Linq;
 using Dalamud.Plugin.Services;
+using Lumina.Text;
 
 namespace SpiritbondWatcher;
 
@@ -10,22 +10,22 @@ public static class GearChecker
 {
     private static readonly InventoryType[] InventoriesToSearch =
     [
+        InventoryType.Inventory1,
+        InventoryType.Inventory2,
+        InventoryType.Inventory3,
+        InventoryType.Inventory4,
         InventoryType.EquippedItems,
-        InventoryType.ArmoryBody,
-        InventoryType.ArmoryEar,
-        InventoryType.ArmoryFeets,
-        InventoryType.ArmoryHands,
+        InventoryType.ArmoryOffHand,
         InventoryType.ArmoryHead,
+        InventoryType.ArmoryBody,
+        InventoryType.ArmoryHands,
         InventoryType.ArmoryLegs,
+        InventoryType.ArmoryFeets,
+        InventoryType.ArmoryEar,
         InventoryType.ArmoryNeck,
-        InventoryType.ArmoryRings,
         InventoryType.ArmoryWrist,
+        InventoryType.ArmoryRings,
         InventoryType.ArmoryMainHand,
-        InventoryType.ArmoryOffHand
-        // InventoryType.Inventory1,
-        // InventoryType.Inventory2,
-        // InventoryType.Inventory3,
-        // InventoryType.Inventory4,
     ];
     
     public static void CheckGear(IDataManager data, IChatGui chat, Config config, string args)
@@ -37,34 +37,36 @@ public static class GearChecker
                 select item.Name).ToList();
 
         var stringBuilder = new SeStringBuilder();
-        stringBuilder.AddUiForeground(34);
+        stringBuilder.PushColorType(69);
 
-        string message;
+        var message = string.Empty;
         
         if (items.Count != 0)
         {
             var newLine = config.BondedGearDisplayLineByLine;
-            message = "Gear fully bonded:" + (newLine ? "\n" : " ");
+            stringBuilder.Append("Gear fully bonded:" + (newLine ? "\n" : " "));
 
             if (items.Count > 10)
             {
-                message += string.Join((newLine ? "\n" : ", "), items.Take(10));
                 message += string.Format((newLine ? "\n({0} more)" : " and {0} more"), items.Count - 10);
-            }
-            else
-            {
-                message += string.Join((newLine ? "\n" : ", "), items);
+                items = items.Take(10).ToList();
             }
 
-            stringBuilder.AddText(message);
-            chat.Print(stringBuilder.BuiltString);
+            for (var i = 0; i < items.Count; i++)
+            {
+                if (i != 0) stringBuilder.Append(newLine ? "\n" : " ");
+                stringBuilder.Append(items[i]);
+            }
+
+            stringBuilder.Append(message);
+            chat.Print(stringBuilder.ToArray());
         }
         else if(args != "zone")
         {
             message = "No gear fully bonded";
 
-            stringBuilder.AddText(message);
-            chat.Print(stringBuilder.BuiltString);
+            stringBuilder.Append(message);
+            chat.Print(stringBuilder.ToArray());
         }
     }
 }

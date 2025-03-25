@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Dalamud.Game.Inventory;
 using FFXIVClientStructs.FFXIV.Client.Game;
 
 namespace SpiritbondWatcher;
@@ -17,8 +18,8 @@ public static unsafe class Inventory
 
             for (var i = 0; i < size; i++)
             {
-                var item = container->GetInventorySlot(i);
-                if (item->ItemId != 0 && item->Spiritbond >= 10000)
+                var item = (GameInventoryItem*)container->GetInventorySlot(i);
+                if (item->ItemId != 0 && !item->IsCollectable && item->SpiritbondOrCollectability >= 10000)
                 {
                     bondedItems.Add(item->ItemId);
                 }

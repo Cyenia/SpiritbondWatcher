@@ -7,7 +7,7 @@ namespace SpiritbondWatcher;
 
 internal sealed class Plugin : IDalamudPlugin
 {
-    private const string Command = "/sbw";
+    private const string Command = "/spritbond";
 
     private IDalamudPluginInterface? PluginInterface { get; init; }
     private ICommandManager CommandManager { get; init; }
