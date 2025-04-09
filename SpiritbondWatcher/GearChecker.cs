@@ -1,8 +1,10 @@
 ﻿using FFXIVClientStructs.FFXIV.Client.Game;
 using Lumina.Excel.Sheets;
 using System.Linq;
+using Dalamud.Game.Text.SeStringHandling;
+using Dalamud.Game.Text.SeStringHandling.Payloads;
 using Dalamud.Plugin.Services;
-using Lumina.Text;
+using Dalamud.Utility;
 
 namespace SpiritbondWatcher;
 
@@ -28,7 +30,7 @@ public static class GearChecker
         InventoryType.ArmoryMainHand,
     ];
     
-    public static void CheckGear(IDataManager data, IChatGui chat, Config config, string args)
+    public static void CheckGear(DalamudLinkPayload payload, IDataManager data, IChatGui chat, Config config, string args)
     {
         var items =
             (from bondedItem in Inventory.GetBondedItems(InventoriesToSearch)
@@ -37,14 +39,14 @@ public static class GearChecker
                 select item.Name).ToList();
 
         var stringBuilder = new SeStringBuilder();
-        stringBuilder.PushColorType(69);
+        stringBuilder.Add(payload);
 
         var message = string.Empty;
         
         if (items.Count != 0)
         {
             var newLine = config.BondedGearDisplayLineByLine;
-            stringBuilder.Append("Gear fully bonded:" + (newLine ? "\n" : " "));
+            stringBuilder.AddUiForeground("Gear fully bonded:" + (newLine ? "\n" : " "), 69);
 
             if (items.Count > 10)
             {
@@ -55,18 +57,18 @@ public static class GearChecker
             for (var i = 0; i < items.Count; i++)
             {
                 if (i != 0) stringBuilder.Append(newLine ? "\n" : " ");
-                stringBuilder.Append(items[i]);
+                stringBuilder.AddUiForeground(items[i].ExtractText().StripSoftHyphen(), 69);
             }
 
-            stringBuilder.Append(message);
-            chat.Print(stringBuilder.ToArray());
+            stringBuilder.AddUiForeground(message, 69);
+            chat.Print(stringBuilder.Build());
         }
         else if(args != "zone")
         {
             message = "No gear fully bonded";
 
             stringBuilder.Append(message);
-            chat.Print(stringBuilder.ToArray());
+            chat.Print(stringBuilder.Build());
         }
     }
 }

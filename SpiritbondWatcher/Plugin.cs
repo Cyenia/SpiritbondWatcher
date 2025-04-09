@@ -1,7 +1,11 @@
-﻿using Dalamud.Game.Command;
+﻿using System;
+using Dalamud.Game.Command;
 using Dalamud.Plugin;
 using System.Threading.Tasks;
+using Dalamud.Game.Text.SeStringHandling;
+using Dalamud.Game.Text.SeStringHandling.Payloads;
 using Dalamud.Plugin.Services;
+using FFXIVClientStructs.FFXIV.Client.Game;
 
 namespace SpiritbondWatcher;
 
@@ -16,18 +20,23 @@ internal sealed class Plugin : IDalamudPlugin
     private IChatGui Chat { get; init; }
     private Config Config { get; init; }
     private ConfigUI ConfigUI { get; init; }
+    private IGameGui GameGui { get; init; }
 
-    public Plugin(IDalamudPluginInterface pluginInterface, ICommandManager commandManager, IClientState client, IDataManager data, IChatGui chat)
+    private DalamudLinkPayload Payload { get; }
+
+    public Plugin(IDalamudPluginInterface pluginInterface, ICommandManager commandManager, IClientState client, IDataManager data, IChatGui chat, IGameGui gui)
     {
         PluginInterface = pluginInterface;
         CommandManager = commandManager;
         Client = client;
         Data = data;
         Chat = chat;
+        GameGui = gui;
 
         Config = PluginInterface.GetPluginConfig() as Config ?? new Config();
         Config.Initialize(PluginInterface);
         ConfigUI = new ConfigUI(Config);
+        Payload = PluginInterface!.AddChatLinkHandler(1, HandleCommand);
 
         CommandManager.AddHandler(Command, new CommandInfo(OnCommand)
         {
@@ -47,7 +56,16 @@ internal sealed class Plugin : IDalamudPlugin
 
     private void OnCommand(string cmd, string args)
     {
-        Task.Run(() => GearChecker.CheckGear(Data, Chat, Config, args));
+        Task.Run(() => GearChecker.CheckGear(Payload, Data, Chat, Config, args));
+
+        var moreInfo = new SeStringBuilder()
+            .Add(Payload)
+            .AddText("[")
+            .AddUiForeground("Click to see more information", 32)
+            .AddText("]")
+            .Add(RawPayload.LinkTerminator)
+            .Build();
+        Chat.Print(moreInfo);
     }
 
     private void DrawUI()
@@ -60,8 +78,14 @@ internal sealed class Plugin : IDalamudPlugin
         ConfigUI.Visible = !ConfigUI.Visible;
     }
 
+    private unsafe void HandleCommand(uint id, SeString message) {
+        if (GameGui.GetAddonByName("MaterializeDialog") == IntPtr.Zero)
+            ActionManager.Instance()->UseAction(ActionType.GeneralAction, 14);
+    }
+
     public void Dispose()
     {
+        PluginInterface!.RemoveChatLinkHandler();
         CommandManager.RemoveHandler(Command);
         Client.TerritoryChanged -= OnZoneChange;
     }

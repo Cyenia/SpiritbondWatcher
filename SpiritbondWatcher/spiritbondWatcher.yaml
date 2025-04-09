@@ -6,4 +6,4 @@ tags:
   - Utility
 internal_name: SpiritbondWatcher
 repo_url: https://github.com/Cyenia/SpiritbondWatcher
-changelog: api12 update
+changelog: Added chat payload to open the materialize dialog
