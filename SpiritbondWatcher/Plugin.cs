@@ -57,15 +57,6 @@ internal sealed class Plugin : IDalamudPlugin
     private void OnCommand(string cmd, string args)
     {
         Task.Run(() => GearChecker.CheckGear(Payload, Data, Chat, Config, args));
-
-        var moreInfo = new SeStringBuilder()
-            .Add(Payload)
-            .AddText("[")
-            .AddUiForeground("Click to see more information", 32)
-            .AddText("]")
-            .Add(RawPayload.LinkTerminator)
-            .Build();
-        Chat.Print(moreInfo);
     }
 
     private void DrawUI()
