@@ -6,4 +6,4 @@ tags:
   - Utility
 internal_name: SpiritbondWatcher
 repo_url: https://github.com/Cyenia/SpiritbondWatcher
-changelog: Removed test message
+changelog: Fixed link payload

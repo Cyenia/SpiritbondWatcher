@@ -39,12 +39,11 @@ public static class GearChecker
                 select item.Name).ToList();
 
         var stringBuilder = new SeStringBuilder();
-        stringBuilder.Add(payload);
-
         var message = string.Empty;
         
         if (items.Count != 0)
         {
+            stringBuilder.Add(payload);
             var newLine = config.BondedGearDisplayLineByLine;
             stringBuilder.AddUiForeground("Gear fully bonded:" + (newLine ? "\n" : " "), 69);
 
@@ -61,6 +60,8 @@ public static class GearChecker
             }
 
             stringBuilder.AddUiForeground(message, 69);
+            stringBuilder.Add(RawPayload.LinkTerminator);
+
             chat.Print(stringBuilder.Build());
         }
         else if(args != "zone")
