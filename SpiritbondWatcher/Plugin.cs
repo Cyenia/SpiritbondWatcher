@@ -36,7 +36,7 @@ internal sealed class Plugin : IDalamudPlugin
         Config = PluginInterface.GetPluginConfig() as Config ?? new Config();
         Config.Initialize(PluginInterface);
         ConfigUI = new ConfigUI(Config);
-        Payload = PluginInterface!.AddChatLinkHandler(1, HandleCommand);
+        Payload = Chat.AddChatLinkHandler(1, HandleCommand);
 
         CommandManager.AddHandler(Command, new CommandInfo(OnCommand)
         {
@@ -76,7 +76,7 @@ internal sealed class Plugin : IDalamudPlugin
 
     public void Dispose()
     {
-        PluginInterface!.RemoveChatLinkHandler();
+        Chat.RemoveChatLinkHandler();
         CommandManager.RemoveHandler(Command);
         Client.TerritoryChanged -= OnZoneChange;
     }
