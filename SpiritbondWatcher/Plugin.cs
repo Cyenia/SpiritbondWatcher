@@ -49,7 +49,7 @@ internal sealed class Plugin : IDalamudPlugin
         PluginInterface.UiBuilder.OpenMainUi += DrawConfigUI;
     }
 
-    private void OnZoneChange(ushort e)
+    private void OnZoneChange(uint e)
     {
         OnCommand(Command, "zone");
     }
